@@ -1,10 +1,13 @@
 namespace DoofusGame
 {
     using UnityEngine;
+    using TMPro;  
 
     public class ScoreManager : MonoBehaviour
     {
-        public static ScoreManager Instance; 
+        public static ScoreManager Instance;
+        
+        public TextMeshProUGUI scoreText;  
         
         private int score = 0;
         
@@ -20,10 +23,16 @@ namespace DoofusGame
             }
         }
         
+        void Start()  
+        {
+            UpdateScoreUI();
+        }
+        
         public void IncrementScore()
         {
             score++;
             Debug.Log("Score: " + score);
+            UpdateScoreUI(); 
         }
         
         public int GetScore()
@@ -34,6 +43,15 @@ namespace DoofusGame
         public void ResetScore()
         {
             score = 0;
+            UpdateScoreUI();  
+        }
+        
+        void UpdateScoreUI()  
+        {
+            if (scoreText != null)
+            {
+                scoreText.text = score.ToString();
+            }
         }
     }
 }

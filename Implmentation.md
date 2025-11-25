@@ -77,3 +77,9 @@ so this is the core logic I have only loggeed the scoring process and the GameEn
 ### Camera Follow Basics
 
 Like Every other game we will make the main camera follow the target our protagonist in this for this we will make the cameralFollow.cs in which we will get the compenent and target it using lookAt and we can achieve it very easily.
+
+### UI BASICS
+
+In this section I have implemented two canvas one for the screen or the main camera overlay which just shows the basic score ui in top of the main camera and using the score variable dynamicaly showing it in the top of the screen 
+
+similiarily now I have added the canvas on the prefab of the pulpit such that the timer shows in the pulpit platform only I have imported the TEXTMESH pro for this two show the text in the UI and we have now two dynamically showing texts in the game UI one which shows score and the other which shows timer on the Pulpit Prefab.
