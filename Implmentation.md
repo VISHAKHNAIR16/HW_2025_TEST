@@ -80,10 +80,15 @@ Like Every other game we will make the main camera follow the target our protago
 
 ### UI BASICS
 
-In this section I have implemented two canvas one for the screen or the main camera overlay which just shows the basic score ui in top of the main camera and using the score variable dynamicaly showing it in the top of the screen 
+In this section I have implemented two canvas one for the screen or the main camera overlay which just shows the basic score ui in top of the main camera and using the score variable dynamicaly showing it in the top of the screen.
 
 similiarily now I have added the canvas on the prefab of the pulpit such that the timer shows in the pulpit platform only I have imported the TEXTMESH pro for this two show the text in the UI and we have now two dynamically showing texts in the game UI one which shows score and the other which shows timer on the Pulpit Prefab.
 
 ### JSON LOADER ADDED
 
 Now to finish the Level 1 and 2 of the assignment both I have made the JSON loader which takes in the values and for that I have made the GameSettings which initialises all the data structures for the JSON file to be loaded meaning it can be given the input and the GameSettingLoader which has the the methods which can will be called to get or update the data in the playerMovement file and the pulpit file accordingly so now we can change the values direclty through the JSON code which is more Convinant and also then it can also be an advantage while creating a menu system where the Users select the speed of our little protagonist.
+
+### Made the UI panels for the new Start and Restart screen
+
+It is the basic version of it and just shows two panels over the Start screen and the restart screen and the button changes the UI manager script which we created now which changes on the click and shifts from one scene to the other it is a very basic and logic nothing much fancy.
+
