@@ -1,4 +1,4 @@
-namespace DoofusGame 
+namespace DoofusGame
 {
     using UnityEngine;
 
@@ -10,6 +10,11 @@ namespace DoofusGame
         void Start()
         {
             rb = GetComponent<Rigidbody>();
+            
+            if (GameSettingsLoader.Settings != null && GameSettingsLoader.Settings.player_data != null)
+            {
+                moveSpeed = GameSettingsLoader.Settings.player_data.speed;
+            }
         }
 
         void FixedUpdate()
@@ -18,14 +23,14 @@ namespace DoofusGame
             {
                 return;
             }
-            
+
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
             Vector3 velocity = rb.linearVelocity;
             velocity.x = horizontal * moveSpeed;
             velocity.z = vertical * moveSpeed;
-            
+
             rb.linearVelocity = velocity;
         }
     }

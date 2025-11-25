@@ -21,10 +21,13 @@ namespace DoofusGame
 
         void Start()
         {
+            if (GameSettingsLoader.Settings != null && GameSettingsLoader.Settings.pulpit_data != null)
+            {
+                minLifetime = GameSettingsLoader.Settings.pulpit_data.min_pulpit_destroy_time;
+                maxLifetime = GameSettingsLoader.Settings.pulpit_data.max_pulpit_destroy_time;
+            }
             lifetime = Random.Range(minLifetime, maxLifetime);
             destroyTime = Time.time + lifetime;
-
-            Debug.Log("Pulpit will disappear in " + lifetime + " seconds");
         }
 
         void Update()
