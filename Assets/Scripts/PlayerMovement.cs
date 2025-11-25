@@ -14,14 +14,17 @@ namespace DoofusGame
 
         void FixedUpdate()
         {
+            if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver())
+            {
+                return;
+            }
+            
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
-            
             Vector3 velocity = rb.linearVelocity;
             velocity.x = horizontal * moveSpeed;
-            velocity.z = vertical * moveSpeed;  
-            
+            velocity.z = vertical * moveSpeed;
             
             rb.linearVelocity = velocity;
         }

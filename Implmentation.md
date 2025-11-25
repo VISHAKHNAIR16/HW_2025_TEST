@@ -66,4 +66,14 @@ So after all this changes I commited My Code
 
 ### Scoring Mechanism and Game Ending Logic
 
-Now after this lets continue working on the logical part of the game meaning how does our doofus gets his score for that if he touches the pulpit it is one score and every new pulpit he touches his score counter gets incremented by one so 
+Now after this lets continue working on the logical part of the game meaning how does our doofus gets his score for that if he touches the pulpit it is one score and every new pulpit he touches his score counter gets incremented by one so.
+
+So now what I have implemented is a new cs script called ScoreManager which does which is a singleton which means only instatiated once which will help us in making the score or changing it only once and on the other updates the various scoreManager instance doesnt get created then I have implenmented when the on the pulpit I have on the tag player when it OnCollisionEnter() the score increments by calling the increment function of the singleton instance of the scoreManager this is the basic logic and Also there is also another condition which checks if it is has the pulpit being stepped on any earlier time such that we dont count it twice.
+
+For Game Ending logic we can do one thing is fallDetection.cs in which we see whether the doofus falls below -5 Y positions and then if it goes we will update in the ScoreManager and also check in the update section of the playerMovement in which we check whether the GameInstance is there or not if it is closed then we will stop the playerMovement and end the game.
+
+so this is the core logic I have only loggeed the scoring process and the GameEnding logic in the debug console just for testing purpose.
+
+### Camera Follow Basics
+
+Like Every other game we will make the main camera follow the target our protagonist in this for this we will make the cameralFollow.cs in which we will get the compenent and target it using lookAt and we can achieve it very easily.

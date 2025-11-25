@@ -10,6 +10,7 @@ namespace DoofusGame
         private float destroyTime;
         private float lifetime;
         private bool hasSpawnedNext = false;
+        private bool hasBeenSteppedOn = false;
         
         public PulpitManager pulpitManager;
 
@@ -23,9 +24,7 @@ namespace DoofusGame
 
         void Update()
         {
-            
             float spawnTriggerTime = destroyTime - (lifetime * 0.5f);
-            
             
             if (!hasSpawnedNext && Time.time >= spawnTriggerTime)
             {
@@ -36,10 +35,24 @@ namespace DoofusGame
                 }
             }
             
-           
             if (Time.time >= destroyTime)
             {
                 Destroy(gameObject);
+            }
+        }
+        
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "Player" && !hasBeenSteppedOn)
+            {
+                hasBeenSteppedOn = true;
+                
+                if (ScoreManager.Instance != null)
+                {
+                    ScoreManager.Instance.IncrementScore();
+                }
+                
+                Debug.Log("Doofus stepped on a new Pulpit!");
             }
         }
     }
