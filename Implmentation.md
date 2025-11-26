@@ -104,5 +104,7 @@ for basic engagement added FX sounds for score increment and gameOver and also a
 In Animation now for only using the coding animations I have done which is normal fade in and fade out of the pulpit platform and the shaking which makes the game a bit more intense and engaging to play 
 
 
+### UI UPDATED
 
+The Full UI IS UPDATED NOW THE GAME HAS ALL THE FEATURES OF THE ASSGINMENT so now any more features will be my own innovation or rendition towards this
 

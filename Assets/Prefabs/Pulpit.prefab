@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3906675083933581586}
   - component: {fileID: 2319153756802923097}
   - component: {fileID: 7032774027246850055}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TimerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 7939593018826321143}
   - component: {fileID: 8935506024559683269}
   - component: {fileID: 344978453693562793}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 192387361331903473}
   - component: {fileID: 4025305363485598824}
   - component: {fileID: -8145496671707589513}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pulpit
   m_TagString: Pulpit
   m_Icon: {fileID: 0}
