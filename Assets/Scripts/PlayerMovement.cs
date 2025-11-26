@@ -27,6 +27,8 @@ namespace DoofusGame
             {
                 moveSpeed = GameSettingsLoader.Settings.player_data.speed;
             }
+
+            moveSpeed = moveSpeed * 1.5f;
         }
 
         void Update()

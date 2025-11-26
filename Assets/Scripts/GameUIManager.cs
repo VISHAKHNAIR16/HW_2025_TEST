@@ -8,66 +8,69 @@ namespace DoofusGame
 
     public class GameUIManager : MonoBehaviour
     {
+        
+        public static GameUIManager Instance;
+
         [Header("UI Panels")]
         public GameObject startPanel;
         public GameObject endPanel;
-        public GameObject introPanel;
-        public GameObject gameHUD;
-
+        public GameObject introPanel;          
+        public GameObject gameHUD;             
+        
         [Header("Text Elements")]
         public TextMeshProUGUI finalScoreText;
-        public TextMeshProUGUI narrationText;
+        public TextMeshProUGUI narrationText;  
+        public TextMeshProUGUI levelText;      
 
         [Header("Cinematics")]
-        public Animator cameraAnimator;
-        public MonoBehaviour playerScript;
+        public Animator cameraAnimator;        
+        public MonoBehaviour playerScript;     
 
         [Header("Cinematic Settings")]
         public float typingSpeed = 0.05f;
+        
+        [Tooltip("The speed of the animation. 0.1 = Super Slow Motion.")]
+        [Range(0.001f, 2.0f)]
+        public float cinematicSpeed = 0.1f; 
 
-        [Range(0.01f, 2.0f)]
-        public float cinematicSpeed = 0.1f; // Slow motion speed
+        public string animationClipName = "CameraIntroAnim"; 
 
-        public string animationClipName = "CameraIntroAnim";
+        [Header("Timing Control")]
+        public bool useManualDuration = true; 
+        public float manualDuration = 6.0f; 
 
-        [Header("Timing Fix")]
-        [Tooltip("Uncheck this to set the exact seconds yourself!")]
-        public bool useAutomaticTiming = false;
-
-        [Tooltip("How many seconds until the game starts?")]
-        public float manualDuration = 6.0f;
-
-        // Story Lines
-        private string line1 = "Legends speak of a trial no one has conquered...";
-        private string line2 = "Fifty floating platforms. One impossible journey.";
-        private string line3 = "But Doofus fears nothing. The adventure begins NOW!";
-
+        
+        private string line1 = "In a world of forgotten legends...";
+        private string line2 = "The Pulpit Gauntlet awaits.";
+        private string line3 = "Ready or not... HERE I COME!";
 
         private CanvasGroup startPanelGroup;
         private CanvasGroup endPanelGroup;
 
         void Awake()
         {
-            if (startPanel != null) startPanelGroup = startPanel.GetComponent<CanvasGroup>();
-            if (endPanel != null) endPanelGroup = endPanel.GetComponent<CanvasGroup>();
+            
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+
+            if(startPanel != null) startPanelGroup = startPanel.GetComponent<CanvasGroup>();
+            if(endPanel != null) endPanelGroup = endPanel.GetComponent<CanvasGroup>();
         }
 
         void Start()
         {
-            // 1. Initial State
-            if (startPanel != null) startPanel.SetActive(true);
-            if (endPanel != null) endPanel.SetActive(false);
-            if (introPanel != null) introPanel.SetActive(false);
-            if (gameHUD != null) gameHUD.SetActive(false);
+            if(startPanel != null) startPanel.SetActive(true);
+            if(endPanel != null) endPanel.SetActive(false);
+            if(introPanel != null) introPanel.SetActive(false);
+            if(gameHUD != null) gameHUD.SetActive(false);
+            if(levelText != null) levelText.gameObject.SetActive(false); 
 
-            // 2. Pause Physics
             Time.timeScale = 0f;
 
-            // 3. Prepare Camera
-            if (cameraAnimator != null)
+            if(cameraAnimator != null) 
             {
                 cameraAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
-                cameraAnimator.enabled = false;
+                cameraAnimator.enabled = false; 
             }
         }
 
@@ -78,25 +81,22 @@ namespace DoofusGame
 
         IEnumerator PlayIntroCinematic()
         {
-            // --- PHASE 1: TEXT ---
-            if (startPanel != null) startPanel.SetActive(false);
-            if (introPanel != null) introPanel.SetActive(true);
-            Time.timeScale = 0f;
-
-            // Freeze Camera at Frame 0
-            if (cameraAnimator != null)
+            
+            if(startPanel != null) startPanel.SetActive(false);
+            if(introPanel != null) introPanel.SetActive(true); 
+            
+            if(cameraAnimator != null)
             {
                 cameraAnimator.enabled = true;
-                cameraAnimator.Play(animationClipName, 0, 0f);
-                cameraAnimator.speed = 0f;
+                cameraAnimator.Play(animationClipName, 0, 0f); 
+                cameraAnimator.speed = 0f; 
             }
 
-            // Play Narration
-            if (narrationText != null)
+            if(narrationText != null)
             {
-                narrationText.text = "";
+                narrationText.text = ""; 
                 yield return StartCoroutine(TypeText(line1));
-                yield return new WaitForSecondsRealtime(1.5f);
+                yield return new WaitForSecondsRealtime(1.5f); 
 
                 narrationText.text = "";
                 yield return StartCoroutine(TypeText(line2));
@@ -105,41 +105,56 @@ namespace DoofusGame
                 narrationText.text = "";
                 yield return StartCoroutine(TypeText(line3));
                 yield return new WaitForSecondsRealtime(1.0f);
-
-                narrationText.text = "";
+                narrationText.text = ""; 
             }
 
-            // --- PHASE 2: MOVIE ---
-            if (introPanel != null) introPanel.SetActive(false);
+            
+            if(introPanel != null) introPanel.SetActive(false); 
 
-            if (cameraAnimator != null)
+            if(cameraAnimator != null)
             {
-                cameraAnimator.speed = cinematicSpeed;
-                yield return null;
-
+                cameraAnimator.speed = cinematicSpeed; 
+                
                 float waitTime = 0f;
-
-                if (useAutomaticTiming)
+                if (useManualDuration) waitTime = manualDuration;
+                else
                 {
-                    // Old math way
+                    yield return null; 
                     float clipLength = cameraAnimator.GetCurrentAnimatorStateInfo(0).length;
                     waitTime = clipLength / cinematicSpeed;
                 }
-                else
-                {
-                    // NEW MANUAL WAY (Safe!)
-                    waitTime = manualDuration;
-                }
 
-                Debug.Log($"Cinematic waiting for: {waitTime} seconds.");
                 yield return new WaitForSecondsRealtime(waitTime);
             }
 
-            // --- PHASE 3: GO! ---
-            if (gameHUD != null) gameHUD.SetActive(true);
-            if (cameraAnimator != null) cameraAnimator.enabled = false;
-            if (playerScript != null) playerScript.enabled = true;
-            Time.timeScale = 1f;
+            
+            if(gameHUD != null) gameHUD.SetActive(true);
+            if(cameraAnimator != null) cameraAnimator.enabled = false; 
+            if(playerScript != null) playerScript.enabled = true;     
+            Time.timeScale = 1f; 
+
+            
+            ShowLevelUp(1);
+        }
+
+        
+        public void ShowLevelUp(int level)
+        {
+            if(levelText != null)
+            {
+                StartCoroutine(LevelTextRoutine(level));
+            }
+        }
+
+        IEnumerator LevelTextRoutine(int level)
+        {
+            levelText.text = "LEVEL " + level;
+            levelText.gameObject.SetActive(true);
+            
+            
+            yield return new WaitForSeconds(3.0f);
+            
+            levelText.gameObject.SetActive(false);
         }
 
         IEnumerator TypeText(string line)
@@ -153,10 +168,10 @@ namespace DoofusGame
 
         public void ShowEndPanel(int score)
         {
-            if (endPanel != null)
+            if(endPanel != null)
             {
                 endPanel.SetActive(true);
-                if (finalScoreText != null) finalScoreText.text = score.ToString();
+                if(finalScoreText != null) finalScoreText.text = score.ToString();
                 StartCoroutine(FadeIn(endPanelGroup));
             }
         }
@@ -169,7 +184,7 @@ namespace DoofusGame
 
         IEnumerator FadeIn(CanvasGroup cg)
         {
-            if (cg == null) yield break;
+            if(cg == null) yield break;
             cg.alpha = 0;
             cg.gameObject.SetActive(true);
             float alpha = 0;
