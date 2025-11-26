@@ -54,6 +54,12 @@ namespace DoofusGame
             activePulpits.Add(newPulpit);
             lastPulpitPosition = newPosition;
             Debug.Log("Spawned pulpit at: " + newPosition);
+
+            // Play spawn sound
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySpawnSound();
+            }
         }
 
 

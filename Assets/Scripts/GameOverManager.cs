@@ -28,17 +28,24 @@ namespace DoofusGame
 
                 int finalScore = ScoreManager.Instance.GetScore();
 
-                // Show EndPanel and score via UI Manager
+                
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayGameOverSound();
+                }
+
+                
                 var ui = FindObjectOfType<GameUIManager>();
                 if (ui != null)
                 {
                     ui.ShowEndPanel(finalScore);
                 }
 
-                Time.timeScale = 0f; // Stop the game
+                Time.timeScale = 0f;
                 Debug.Log("GAME OVER! Final Score: " + finalScore);
             }
         }
+
 
 
         public bool IsGameOver()

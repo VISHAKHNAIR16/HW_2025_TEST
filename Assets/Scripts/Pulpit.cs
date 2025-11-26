@@ -45,6 +45,12 @@ namespace DoofusGame
 
             if (Time.time >= destroyTime)
             {
+                // Play despawn sound before destroying
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayDespawnSound();
+                }
+
                 Destroy(gameObject);
             }
 

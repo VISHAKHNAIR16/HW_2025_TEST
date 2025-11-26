@@ -92,3 +92,12 @@ Now to finish the Level 1 and 2 of the assignment both I have made the JSON load
 
 It is the basic version of it and just shows two panels over the Start screen and the restart screen and the button changes the UI manager script which we created now which changes on the click and shifts from one scene to the other it is a very basic and logic nothing much fancy.
 
+
+
+### Audio 
+
+for basic engagement added FX sounds for score increment and gameOver and also added a RunnerMusic which I found from Unity Assets store as free
+
+
+### Next Up is Animation 
+

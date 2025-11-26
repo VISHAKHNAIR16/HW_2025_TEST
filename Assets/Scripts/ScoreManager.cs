@@ -1,16 +1,16 @@
 namespace DoofusGame
 {
     using UnityEngine;
-    using TMPro;  
+    using TMPro;
 
     public class ScoreManager : MonoBehaviour
     {
         public static ScoreManager Instance;
-        
-        public TextMeshProUGUI scoreText;  
-        
+
+        public TextMeshProUGUI scoreText;
+
         private int score = 0;
-        
+
         void Awake()
         {
             if (Instance == null)
@@ -22,31 +22,36 @@ namespace DoofusGame
                 Destroy(gameObject);
             }
         }
-        
-        void Start()  
+
+        void Start()
         {
             UpdateScoreUI();
         }
-        
+
         public void IncrementScore()
         {
             score++;
             Debug.Log("Score: " + score);
-            UpdateScoreUI(); 
+            UpdateScoreUI();
+
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayScoreSound();
+            }
         }
-        
+
         public int GetScore()
         {
             return score;
         }
-        
+
         public void ResetScore()
         {
             score = 0;
-            UpdateScoreUI();  
+            UpdateScoreUI();
         }
-        
-        void UpdateScoreUI()  
+
+        void UpdateScoreUI()
         {
             if (scoreText != null)
             {
