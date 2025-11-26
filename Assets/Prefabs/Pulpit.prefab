@@ -360,6 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f7c30ea27491ee41ae4c74c0d81ccdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnAnimationDuration: 0.3
+  despawnAnimationDuration: 0.5
   minLifetime: 3
   maxLifetime: 5
   pulpitManager: {fileID: 0}

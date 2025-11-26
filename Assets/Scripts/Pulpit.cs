@@ -6,6 +6,19 @@ namespace DoofusGame
 
     public class Pulpit : MonoBehaviour
     {
+        [Header("Animation Settings")]
+        public float spawnAnimationDuration = 0.3f;
+        private float spawnStartTime;
+        private bool isSpawning = true;
+
+        private Vector3 originalScale;
+
+        public float despawnAnimationDuration = 0.5f;
+        private bool isDespawning = false;
+        private float despawnStartTime;
+        private Material pulpitMaterial;
+        private Color originalColor;
+
         public float minLifetime = 3f;
         public float maxLifetime = 5f;
 
@@ -19,8 +32,17 @@ namespace DoofusGame
         public TextMeshProUGUI timerText;
 
 
+        private Vector3 pulpitOriginalPosition;
+
+
         void Start()
         {
+            originalScale = transform.localScale;
+            spawnStartTime = Time.time;
+            pulpitOriginalPosition = transform.position;
+
+
+
             if (GameSettingsLoader.Settings != null && GameSettingsLoader.Settings.pulpit_data != null)
             {
                 minLifetime = GameSettingsLoader.Settings.pulpit_data.min_pulpit_destroy_time;
@@ -28,10 +50,40 @@ namespace DoofusGame
             }
             lifetime = Random.Range(minLifetime, maxLifetime);
             destroyTime = Time.time + lifetime;
+
+
+            Renderer renderer = GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                pulpitMaterial = renderer.material;
+                originalColor = pulpitMaterial.color;
+            }
         }
+
 
         void Update()
         {
+
+            if (isSpawning)
+            {
+                float elapsed = Time.time - spawnStartTime;
+                float progress = Mathf.Clamp01(elapsed / spawnAnimationDuration);
+
+
+                transform.localScale = originalScale * progress;
+
+                if (progress >= 1f)
+                {
+                    isSpawning = false;
+                    transform.localScale = originalScale;
+                }
+            }
+
+            if (GameOverManager.Instance != null && GameOverManager.Instance.IsGameOver())
+            {
+                return;
+            }
+
             float spawnTriggerTime = destroyTime - (lifetime * 0.5f);
 
             if (!hasSpawnedNext && Time.time >= spawnTriggerTime)
@@ -43,24 +95,85 @@ namespace DoofusGame
                 }
             }
 
-            if (Time.time >= destroyTime)
+            
+            if (Time.time >= destroyTime && !isDespawning)
             {
-                // Play despawn sound before destroying
+                isDespawning = true;
+                despawnStartTime = Time.time;
+
+                
                 if (AudioManager.Instance != null)
                 {
                     AudioManager.Instance.PlayDespawnSound();
                 }
+            }
 
-                Destroy(gameObject);
+                        
+            if (!isDespawning && (destroyTime - Time.time < 0.4f))
+            {
+                float shakeAmount = 0.10f;
+                float shakeFrequency = 60f;
+                Vector3 shakeOffset = new Vector3(
+                    Mathf.Sin(Time.time * shakeFrequency) * shakeAmount,
+                    0,
+                    Mathf.Cos(Time.time * shakeFrequency) * shakeAmount);
+                transform.position = pulpitOriginalPosition + shakeOffset;
+            }
+            else if (!isDespawning)
+            {
+                transform.position = pulpitOriginalPosition;
             }
 
 
-            // Update timer UI
+            
+            if (isDespawning)
+            {
+                float elapsed = Time.time - despawnStartTime;
+                float progress = Mathf.Clamp01(elapsed / despawnAnimationDuration);
+
+                // Fade out and sink down
+                Vector3 sinkPosition = pulpitOriginalPosition;
+                sinkPosition.y -= progress * 3f; // sink by 1 unit over time
+                transform.position = sinkPosition;
+
+                if (pulpitMaterial != null)
+                {
+                    Color fadeColor = originalColor;
+                    fadeColor.a = 1f - progress; // Fade out
+                    pulpitMaterial.color = fadeColor;
+                }
+
+                // Destroy at end of animation
+                if (progress >= 1f)
+                {
+                    Destroy(gameObject);
+                }
+            }
+
+
+
+
             if (timerText != null)
             {
                 float timeLeft = Mathf.Max(0, destroyTime - Time.time);
-                timerText.text = timeLeft.ToString("F2");  // Shows 2 decimal places
+                timerText.text = timeLeft.ToString("F2");
+
+                float lifePercentage = timeLeft / lifetime;
+
+                if (lifePercentage > 0.5f)
+                {
+                    timerText.color = Color.white;
+                }
+                else if (lifePercentage > 0.25f)
+                {
+                    timerText.color = Color.yellow;
+                }
+                else
+                {
+                    timerText.color = Color.red;
+                }
             }
+
 
         }
 
